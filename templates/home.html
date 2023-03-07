@@ -8,9 +8,36 @@
     <h1>Weather Data API</h1>
     <p>URL Format: http://127.0.0.1:5001/api/v1/STAID/DATE</p>
     <p>Where STAID is the station ID in the table below
-    <br>and   DATE is in the format YYYYMMDD</p>
+    <br>and   DATE is optional and in the format YYYY[MM[DD]]</p>
     <p>URL Example: http://127.0.0.1:5001/api/v1/10/19881025
-    <br>to get the average temperature recorded at the Stockholm station on 25th October 1988</p>
+    <br>to get the average temperature recorded at the Stockholm station on 25th October 1988.
+    <br>This will return a 'status'='OK' if the STAID and DATE are found, and dict of dicts as follows:
+    <p>{{example|safe}}</p>
+    <p>Where the 'location' dict keys are:
+    <br>STAID  : Station identifier
+    <br>STANAME: Station name
+    <br>CN     : Country code (ISO3116 countrycodes)
+    <br>LAT    : Latitude in degrees:minutes:seconds (+: North, -: South)
+    <br>LON    : Longitude in degrees:minutes:seconds (+: East, -: West)
+    <br>HGTH   : Station elevation in meters</p>
+    <p>And the 'data' dict keys are:
+    <br>SOUID: Source identifier
+    <br>Date : Date YYYY-MM-DD
+    <br>Celsius   : Daily mean temperature in 'C
+    <br>Fahrenheit : Daily mean temperature in 'F
+    <br>Q_TG : quality code for temperature data (0='valid'; 1='suspect'; 9='missing')
+    </p>
+    <p>If the STAID is not found, only {'status': 'Station not found'} is returned.
+    <br>If the 'DATE' is invalid, {'status': 'Invalid date'} is returned. This may indicate an invalid date format or
+    date out of range for the given station</p>
+    <p>URL Example: http://127.0.0.1:5001/api/v1/10/198810
+    <br>to get the average temperature recorded at the Stockholm station on every day during the month of October 1988.
+    In this case a dict of 'location' (as above) and 'dataframe' dict containing 'data' dicts by index starting at zero.
+    <p>URL Example: http://127.0.0.1:5001/api/v1/10/1988
+    <br>to get the average temperature recorded at the Stockholm station on every day of 1988.
+    <p>URL Example: http://127.0.0.1:5001/api/v1/10
+    <br>to get the average temperature recorded at the Stockholm station for all dates.
+    </p>
     <p>{{data|safe}}</p>
 </body>
 </html>
